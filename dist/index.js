@@ -36,10 +36,12 @@ function blockPullRequest(pullRequestProperties) {
 exports.isAProtectedBranch = (protectedBranchParameter) => (baseBranchName) => protectedBranchParameter.toLowerCase() === baseBranchName.toLowerCase();
 exports.start = () => __awaiter(void 0, void 0, void 0, function* () {
     const pullRequestProperties = github_1.context.payload.pull_requests;
-    if (!pullRequestProperties) {
-        core_1.warning('This action only works in a pull_request event');
-        return;
-    }
+    // FIXME
+    // if (!pullRequestProperties) {
+    //   warning('This action only works in a pull_request event');
+    //   return;
+    // }
+    console.log('HERE', pullRequestProperties);
     const baseBranchName = pullRequestProperties.base.ref;
     if (!exports.isAProtectedBranch(core_1.getInput('protected-branch'))(baseBranchName)) {
         return;
