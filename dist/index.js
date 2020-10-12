@@ -2,30 +2,41 @@ require('./sourcemap-register.js');module.exports =
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
-/***/ 109:
+/***/ 139:
 /***/ (function(__unused_webpack_module, exports, __webpack_require__) {
 
 "use strict";
 
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const core_1 = __importDefault(__webpack_require__(186));
-const github_1 = __importDefault(__webpack_require__(438));
-try {
-    // `who-to-greet` input defined in action metadata file
-    const nameToGreet = core_1.default.getInput('who-to-greet');
-    console.log(`Hello ${nameToGreet}!`);
-    const time = (new Date()).toTimeString();
-    core_1.default.setOutput('time', time);
-    // Get the JSON webhook payload for the event that triggered the workflow
-    const payload = JSON.stringify(github_1.default.context.payload, undefined, 2);
-    console.log(`The event payload: ${payload}`);
-}
-catch (error) {
-    core_1.default.setFailed(error.message);
-}
+exports.start = void 0;
+const github_1 = __webpack_require__(438);
+exports.start = () => __awaiter(void 0, void 0, void 0, function* () {
+    console.log('CONTEXT', github_1.context);
+});
+
+
+/***/ }),
+
+/***/ 109:
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const action_1 = __webpack_require__(139);
+const core_1 = __webpack_require__(186);
+action_1.start()
+    .then(() => core_1.info('Finished!'))
+    .catch(error => core_1.setFailed(error.message));
 
 
 /***/ }),
@@ -43,7 +54,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const os = __importStar(__webpack_require__(87));
+const os = __importStar(__webpack_require__(365));
 /**
  * Commands
  *
@@ -152,7 +163,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const command_1 = __webpack_require__(351);
-const os = __importStar(__webpack_require__(87));
+const os = __importStar(__webpack_require__(365));
 const path = __importStar(__webpack_require__(622));
 /**
  * The code to exit an action
@@ -358,7 +369,7 @@ exports.getState = getState;
 
 /***/ }),
 
-/***/ 53:
+/***/ 87:
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -366,7 +377,7 @@ exports.getState = getState;
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Context = void 0;
 const fs_1 = __webpack_require__(747);
-const os_1 = __webpack_require__(87);
+const os_1 = __webpack_require__(365);
 class Context {
     /**
      * Hydrate the context from the environment
@@ -441,7 +452,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.getOctokit = exports.context = void 0;
-const Context = __importStar(__webpack_require__(53));
+const Context = __importStar(__webpack_require__(87));
 const utils_1 = __webpack_require__(30);
 exports.context = new Context.Context();
 /**
@@ -534,7 +545,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.getOctokitOptions = exports.GitHub = exports.context = void 0;
-const Context = __importStar(__webpack_require__(53));
+const Context = __importStar(__webpack_require__(87));
 const Utils = __importStar(__webpack_require__(914));
 // octokit + plugins
 const core_1 = __webpack_require__(762);
@@ -5793,7 +5804,7 @@ module.exports = require("net");
 
 /***/ }),
 
-/***/ 87:
+/***/ 365:
 /***/ ((module) => {
 
 "use strict";
