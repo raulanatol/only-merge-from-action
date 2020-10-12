@@ -17,17 +17,37 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.start = void 0;
+exports.start = exports.isAProtectedBranch = exports.needBlockPullRequest = void 0;
 const github_1 = __webpack_require__(438);
+const core_1 = __webpack_require__(186);
+exports.needBlockPullRequest = (allowedBranch) => (originBranchName) => allowedBranch.toLowerCase() === originBranchName.toLowerCase();
+function blockPullRequest(pullRequestProperties) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const octokit = github_1.getOctokit(core_1.getInput('github-token'));
+        octokit.pulls.update({
+            owner: pullRequestProperties.head.owner.id,
+            repo: pullRequestProperties.repository.id,
+            pull_number: pullRequestProperties.number,
+            state: 'closed'
+        });
+        console.log('Closed!!');
+    });
+}
+exports.isAProtectedBranch = (protectedBranchParameter) => (baseBranchName) => protectedBranchParameter.toLowerCase() === baseBranchName.toLowerCase();
 exports.start = () => __awaiter(void 0, void 0, void 0, function* () {
-    var _a, _b, _c, _d, _e, _f;
-    console.log('CONTEXT', github_1.context);
-    console.log('REF', github_1.context.ref); // 'refs/heads/main'  in PR refs/pull/1/merge
-    // console.log('BASE_REF', context.base_ref);
-    // console.log('HEAD_REF', context.head_ref);
-    console.log(1, (_b = (_a = github_1.context.payload) === null || _a === void 0 ? void 0 : _a.pull_request) === null || _b === void 0 ? void 0 : _b.base);
-    console.log(2, (_d = (_c = github_1.context.payload) === null || _c === void 0 ? void 0 : _c.pull_request) === null || _d === void 0 ? void 0 : _d.head);
-    console.log(3, (_f = (_e = github_1.context.payload) === null || _e === void 0 ? void 0 : _e.pull_request) === null || _f === void 0 ? void 0 : _f.number);
+    const pullRequestProperties = github_1.context.payload.pull_requests;
+    if (!pullRequestProperties) {
+        core_1.warning('This action only works in a pull_request event');
+        return;
+    }
+    const baseBranchName = pullRequestProperties.base.ref;
+    if (!exports.isAProtectedBranch(core_1.getInput('protected-branch'))(baseBranchName)) {
+        return;
+    }
+    const originBranchName = pullRequestProperties.head.ref;
+    if (exports.needBlockPullRequest(core_1.getInput('allowed-branch'))(originBranchName)) {
+        yield blockPullRequest(pullRequestProperties);
+    }
 });
 
 

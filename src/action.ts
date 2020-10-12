@@ -1,15 +1,41 @@
-import { context } from '@actions/github';
+import { context, getOctokit } from '@actions/github';
+import { getInput, warning } from '@actions/core';
 
+export const needBlockPullRequest = (allowedBranch: string) =>
+  (originBranchName: string): boolean =>
+    allowedBranch.toLowerCase() === originBranchName.toLowerCase();
+
+async function blockPullRequest(pullRequestProperties) {
+  const octokit = getOctokit(getInput('github-token'));
+
+  octokit.pulls.update({
+    owner: pullRequestProperties.head.owner.id,
+    repo: pullRequestProperties.repository.id,
+    pull_number: pullRequestProperties.number,
+    state: 'closed'
+  } as any);
+
+  console.log('Closed!!');
+}
+
+export const isAProtectedBranch = (protectedBranchParameter: string) =>
+  (baseBranchName: string) =>
+    protectedBranchParameter.toLowerCase() === baseBranchName.toLowerCase();
 
 export const start = async () => {
-  console.log('CONTEXT', context);
+  const pullRequestProperties = context.payload.pull_requests;
+  if (!pullRequestProperties) {
+    warning('This action only works in a pull_request event');
+    return;
+  }
 
-  console.log('REF', context.ref); // 'refs/heads/main'  in PR refs/pull/1/merge
-  // console.log('BASE_REF', context.base_ref);
-  // console.log('HEAD_REF', context.head_ref);
+  const baseBranchName = pullRequestProperties.base.ref;
+  if (!isAProtectedBranch(getInput('protected-branch'))(baseBranchName)) {
+    return;
+  }
 
-
-  console.log(1, context.payload?.pull_request?.base);
-  console.log(2, context.payload?.pull_request?.head);
-  console.log(3, context.payload?.pull_request?.number);
+  const originBranchName = pullRequestProperties.head.ref;
+  if (needBlockPullRequest(getInput('allowed-branch'))(originBranchName)) {
+    await blockPullRequest(pullRequestProperties);
+  }
 };

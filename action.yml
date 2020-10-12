@@ -4,6 +4,14 @@ inputs:
   github-token:
     description: 'Github token'
     required: true
+  protected-branch:
+    description: 'The name of the protected branch'
+    default: 'main'
+    required: true
+  allowed-branch:
+    description: 'The name of the branch allowed to merge over the protected branch'
+    default: 'develop'
+    required: true
 runs:
   using: 'node12'
   main: 'dist/index.js'
