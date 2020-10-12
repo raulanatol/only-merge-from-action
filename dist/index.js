@@ -23,16 +23,22 @@ const core_1 = __webpack_require__(186);
 exports.needBlockPullRequest = (allowedBranch) => (originBranchName) => allowedBranch.toLowerCase() !== originBranchName.toLowerCase();
 const blockPullRequest = (pullRequestProperties) => __awaiter(void 0, void 0, void 0, function* () {
     const octokit = github_1.getOctokit(core_1.getInput('github-token'));
+    yield octokit.issues.createComment({
+        repo: github_1.context.repo.repo,
+        owner: github_1.context.repo.owner,
+        body: core_1.getInput('close-message') || '⛔ Invalid branch',
+        issue_number: pullRequestProperties.number
+    });
     const requestOptions = {
-        owner: pullRequestProperties.head.repo.owner.id,
-        repo: pullRequestProperties.base.repo.id,
+        repo: github_1.context.repo.repo,
+        owner: github_1.context.repo.owner,
         pull_number: pullRequestProperties.number,
         state: 'closed'
     };
     console.log('Before:', requestOptions);
     return yield octokit.pulls.update({
-        owner: pullRequestProperties.head.repo.owner.id,
-        repo: pullRequestProperties.base.repo.id,
+        repo: github_1.context.repo.repo,
+        owner: github_1.context.repo.owner,
         pull_number: pullRequestProperties.number,
         state: 'closed'
     });

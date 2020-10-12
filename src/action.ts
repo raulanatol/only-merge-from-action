@@ -8,17 +8,25 @@ export const needBlockPullRequest = (allowedBranch: string) =>
 const blockPullRequest = async pullRequestProperties => {
   const octokit = getOctokit(getInput('github-token'));
 
+  await octokit.issues.createComment({
+    repo: context.repo.repo,
+    owner: context.repo.owner,
+    body: getInput('close-message') || '⛔ Invalid branch',
+    issue_number: pullRequestProperties.number
+  } as any);
+
   const requestOptions = {
-    owner: pullRequestProperties.head.repo.owner.id,
-    repo: pullRequestProperties.base.repo.id,
+    repo: context.repo.repo,
+    owner: context.repo.owner,
     pull_number: pullRequestProperties.number,
     state: 'closed'
   };
+
   console.log('Before:', requestOptions);
 
   return await octokit.pulls.update({
-    owner: pullRequestProperties.head.repo.owner.id,
-    repo: pullRequestProperties.base.repo.id,
+    repo: context.repo.repo,
+    owner: context.repo.owner,
     pull_number: pullRequestProperties.number,
     state: 'closed'
   } as any);
