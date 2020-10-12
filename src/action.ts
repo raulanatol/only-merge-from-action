@@ -3,7 +3,7 @@ import { getInput, warning } from '@actions/core';
 
 export const needBlockPullRequest = (allowedBranch: string) =>
   (originBranchName: string): boolean =>
-    allowedBranch.toLowerCase() === originBranchName.toLowerCase();
+    allowedBranch.toLowerCase() !== originBranchName.toLowerCase();
 
 async function blockPullRequest(pullRequestProperties) {
   const octokit = getOctokit(getInput('github-token'));
@@ -33,8 +33,6 @@ export const start = async () => {
   if (!isAProtectedBranch(getInput('protected-branch'))(baseBranchName)) {
     return;
   }
-
-  console.log(1, baseBranchName);
 
   const originBranchName = pullRequestProperties.head.ref;
   if (needBlockPullRequest(getInput('allowed-branch'))(originBranchName)) {

@@ -22,14 +22,14 @@ describe('action', () => {
   });
 
   describe('needBlockPullRequest', () => {
-    test('should return true if the branch name is equal that the allowed branch - develop', () => {
-      expect(needBlockPullRequest('develop')('develop')).toBeTruthy();
+    test('should return false if the branch name is equal that the allowed branch - develop', () => {
+      expect(needBlockPullRequest('develop')('develop')).toBeFalsy();
     });
 
-    test('should return false if the branch name is not equal that the allowed branch', () => {
-      expect(needBlockPullRequest('develop')('main')).toBeFalsy();
-      expect(needBlockPullRequest('main')('develop')).toBeFalsy();
-      expect(needBlockPullRequest('protected')('develop')).toBeFalsy();
+    test('should return true if the branch name is not equal that the allowed branch', () => {
+      expect(needBlockPullRequest('develop')('main')).toBeTruthy();
+      expect(needBlockPullRequest('main')('develop')).toBeTruthy();
+      expect(needBlockPullRequest('protected')('develop')).toBeTruthy();
     });
   });
 });

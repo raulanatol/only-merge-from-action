@@ -20,7 +20,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.start = exports.isAProtectedBranch = exports.needBlockPullRequest = void 0;
 const github_1 = __webpack_require__(438);
 const core_1 = __webpack_require__(186);
-exports.needBlockPullRequest = (allowedBranch) => (originBranchName) => allowedBranch.toLowerCase() === originBranchName.toLowerCase();
+exports.needBlockPullRequest = (allowedBranch) => (originBranchName) => allowedBranch.toLowerCase() !== originBranchName.toLowerCase();
 function blockPullRequest(pullRequestProperties) {
     return __awaiter(this, void 0, void 0, function* () {
         const octokit = github_1.getOctokit(core_1.getInput('github-token'));
@@ -44,7 +44,6 @@ exports.start = () => __awaiter(void 0, void 0, void 0, function* () {
     if (!exports.isAProtectedBranch(core_1.getInput('protected-branch'))(baseBranchName)) {
         return;
     }
-    console.log(1, baseBranchName);
     const originBranchName = pullRequestProperties.head.ref;
     if (exports.needBlockPullRequest(core_1.getInput('allowed-branch'))(originBranchName)) {
         console.log(3, originBranchName);
