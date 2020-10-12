@@ -35,6 +35,8 @@ function blockPullRequest(pullRequestProperties) {
 }
 exports.isAProtectedBranch = (protectedBranchParameter) => (baseBranchName) => protectedBranchParameter.toLowerCase() === baseBranchName.toLowerCase();
 exports.start = () => __awaiter(void 0, void 0, void 0, function* () {
+    console.log('A------->', github_1.context);
+    console.log('B------->', github_1.context.payload);
     const pullRequestProperties = github_1.context.payload.pull_requests;
     // FIXME
     // if (!pullRequestProperties) {

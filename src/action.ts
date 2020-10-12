@@ -23,6 +23,8 @@ export const isAProtectedBranch = (protectedBranchParameter: string) =>
     protectedBranchParameter.toLowerCase() === baseBranchName.toLowerCase();
 
 export const start = async () => {
+  console.log('A------->', context);
+  console.log('B------->', context.payload);
   const pullRequestProperties = context.payload.pull_requests;
   // FIXME
   // if (!pullRequestProperties) {
