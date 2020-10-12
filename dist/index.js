@@ -24,11 +24,11 @@ exports.needBlockPullRequest = (allowedBranch) => (originBranchName) => allowedB
 function blockPullRequest(pullRequestProperties) {
     return __awaiter(this, void 0, void 0, function* () {
         const octokit = github_1.getOctokit(core_1.getInput('github-token'));
-        console.log(123, pullRequestProperties.head);
-        console.log(1234, pullRequestProperties.head.owner);
+        console.log(123, pullRequestProperties.head.repo);
+        console.log(1234, pullRequestProperties.head.repo.owner);
         console.log(12345, pullRequestProperties.repository);
         octokit.pulls.update({
-            owner: pullRequestProperties.head.owner.id,
+            owner: pullRequestProperties.head.repo.owner.id,
             repo: pullRequestProperties.repository.id,
             pull_number: pullRequestProperties.number,
             state: 'closed'
