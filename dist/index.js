@@ -23,7 +23,9 @@ const core_1 = __webpack_require__(186);
 exports.needBlockPullRequest = (allowedBranch) => (originBranchName) => allowedBranch.toLowerCase() !== originBranchName.toLowerCase();
 function blockPullRequest(pullRequestProperties) {
     return __awaiter(this, void 0, void 0, function* () {
+        console.log('HERET:', core_1.getInput('github-token'));
         const octokit = github_1.getOctokit(core_1.getInput('github-token'));
+        console.log(123, 'asd');
         octokit.pulls.update({
             owner: pullRequestProperties.head.owner.id,
             repo: pullRequestProperties.repository.id,
