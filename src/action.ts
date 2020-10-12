@@ -23,8 +23,6 @@ export const isAProtectedBranch = (protectedBranchParameter: string) =>
     protectedBranchParameter.toLowerCase() === baseBranchName.toLowerCase();
 
 export const start = async () => {
-  console.log('A------->', context);
-  console.log('B------->', context.payload);
   const pullRequestProperties = context.payload.pull_request;
   if (!pullRequestProperties) {
     warning('This action only works in a pull_request event');
@@ -36,8 +34,13 @@ export const start = async () => {
     return;
   }
 
+  console.log(1, baseBranchName);
+
   const originBranchName = pullRequestProperties.head.ref;
   if (needBlockPullRequest(getInput('allowed-branch'))(originBranchName)) {
+    console.log(3, originBranchName);
     await blockPullRequest(pullRequestProperties);
   }
+
+  console.log(2, originBranchName);
 };
