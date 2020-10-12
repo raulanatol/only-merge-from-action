@@ -2,7 +2,9 @@
     <h1>template-action-nodejs-ts</h1>
 </div>
 
-<p>📓 A simple nodejs action template (using typescript)</p>
+<p>Github action to close a PR if the base branch is not from expected</p>
+
+![message](./docs/message.png)
 
 ---
 
@@ -13,12 +15,11 @@
 
 
 - [Inputs](#inputs)
-  - [`who-to-greet`](#who-to-greet)
-- [Outputs](#outputs)
-  - [`time`](#time)
-- [Example usage](#example-usage)
-- [Example using a public action](#example-using-a-public-action)
-- [Example using a private action](#example-using-a-private-action)
+  - [`github-token`](#github-token)
+  - [`protected-branch`](#protected-branch)
+  - [`allowed-branch`](#allowed-branch)
+- [Example of usage](#example-of-usage)
+- [Example using a custom branches](#example-using-a-custom-branches)
 - [Development](#development)
   - [Close release](#close-release)
   - [Documentation](#documentation)
@@ -29,68 +30,40 @@
 
 ### `github-token`
 
-**Required** The name of the person to greet. Default `"World"`.
+**Required** The github token to comment in the PR.
 
-## Outputs
+### `protected-branch`
 
-### `time`
+The name of the protected branch
 
-The time we greeted you.
+### `allowed-branch` 
 
-## Example usage
+The name of the branch allowed to merge over the protected branch
+
+## Example of usage
 
 ```yaml
-uses: raulanatol/template-action-nodejs-ts@v1.0.0
+uses: raulanatol/only-merge-from-action@v1.0.0
 with:
-  who-to-greet: 'Mona the Octocat'
+  github-token: ${{ secrets.GITHUB_TOKEN }}
 ```
   
-## Example using a public action
+## Example using a custom branches
 
 **.github/workflows/main.yml**
 
 ```yaml
-on: [push]
+on: pull_request
 
 jobs:
-  hello_world_job:
+  build:
     runs-on: ubuntu-latest
-    name: A job to say hello
     steps:
-    - name: Hello world action step
-      id: hello
-      uses: raulanatol/template-action-nodejs-ts@v1.0.0
+    - uses: raulanatol/only-merge-from-action@v1.0.0
       with:
-        who-to-greet: 'Mona the Octocat'
-    # Use the output from the `hello` step
-    - name: Get the output time
-      run: echo "The time was ${{ steps.hello.outputs.time }}"
-```
-
-## Example using a private action
-
-**.github/workflows/main.yml**
-
-```yaml
-on: [push]
-
-jobs:
-  hello_world_job:
-    runs-on: ubuntu-latest
-    name: A job to say hello
-    steps:
-      # To use this repository's private action,
-      # you must check out the repository
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Hello world action step
-        uses: ./ # Uses an action in the root directory
-        id: hello
-        with:
-          who-to-greet: 'Mona the Octocat'
-      # Use the output from the `hello` step
-      - name: Get the output time
-        run: echo "The time was ${{ steps.hello.outputs.time }}"
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        protected-branch: production
+        allowed-branch: stage
 ```
 
 ## Development

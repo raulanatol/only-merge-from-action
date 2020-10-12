@@ -15,15 +15,6 @@ const blockPullRequest = async pullRequestProperties => {
     issue_number: pullRequestProperties.number
   } as any);
 
-  const requestOptions = {
-    repo: context.repo.repo,
-    owner: context.repo.owner,
-    pull_number: pullRequestProperties.number,
-    state: 'closed'
-  };
-
-  console.log('Before:', requestOptions);
-
   return await octokit.pulls.update({
     repo: context.repo.repo,
     owner: context.repo.owner,

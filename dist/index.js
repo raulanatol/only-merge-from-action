@@ -29,13 +29,6 @@ const blockPullRequest = (pullRequestProperties) => __awaiter(void 0, void 0, vo
         body: core_1.getInput('close-message') || '⛔ Invalid branch',
         issue_number: pullRequestProperties.number
     });
-    const requestOptions = {
-        repo: github_1.context.repo.repo,
-        owner: github_1.context.repo.owner,
-        pull_number: pullRequestProperties.number,
-        state: 'closed'
-    };
-    console.log('Before:', requestOptions);
     return yield octokit.pulls.update({
         repo: github_1.context.repo.repo,
         owner: github_1.context.repo.owner,
