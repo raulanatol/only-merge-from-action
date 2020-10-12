@@ -8,9 +8,7 @@ export const needBlockPullRequest = (allowedBranch: string) =>
 async function blockPullRequest(pullRequestProperties) {
   const octokit = getOctokit(getInput('github-token'));
 
-  console.log(123, pullRequestProperties.head.repo);
-  console.log(1234, pullRequestProperties.head.repo.owner);
-  console.log(12345, pullRequestProperties.repository);
+  console.log(12345, pullRequestProperties);
 
   octokit.pulls.update({
     owner: pullRequestProperties.head.repo.owner.id,
