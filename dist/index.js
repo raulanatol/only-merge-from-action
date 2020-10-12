@@ -27,7 +27,7 @@ function blockPullRequest(pullRequestProperties) {
         console.log(12345, pullRequestProperties);
         octokit.pulls.update({
             owner: pullRequestProperties.head.repo.owner.id,
-            repo: pullRequestProperties.repository.id,
+            repo: pullRequestProperties.base.repo.id,
             pull_number: pullRequestProperties.number,
             state: 'closed'
         });
