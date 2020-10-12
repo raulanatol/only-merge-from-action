@@ -21,19 +21,22 @@ exports.start = exports.isAProtectedBranch = exports.needBlockPullRequest = void
 const github_1 = __webpack_require__(438);
 const core_1 = __webpack_require__(186);
 exports.needBlockPullRequest = (allowedBranch) => (originBranchName) => allowedBranch.toLowerCase() !== originBranchName.toLowerCase();
-function blockPullRequest(pullRequestProperties) {
-    return __awaiter(this, void 0, void 0, function* () {
-        const octokit = github_1.getOctokit(core_1.getInput('github-token'));
-        console.log(12345, pullRequestProperties);
-        octokit.pulls.update({
-            owner: pullRequestProperties.head.repo.owner.id,
-            repo: pullRequestProperties.base.repo.id,
-            pull_number: pullRequestProperties.number,
-            state: 'closed'
-        });
-        console.log('Closed!!');
+const blockPullRequest = (pullRequestProperties) => __awaiter(void 0, void 0, void 0, function* () {
+    const octokit = github_1.getOctokit(core_1.getInput('github-token'));
+    const requestOptions = {
+        owner: pullRequestProperties.head.repo.owner.id,
+        repo: pullRequestProperties.base.repo.id,
+        pull_number: pullRequestProperties.number,
+        state: 'closed'
+    };
+    console.log('Before:', requestOptions);
+    return yield octokit.pulls.update({
+        owner: pullRequestProperties.head.repo.owner.id,
+        repo: pullRequestProperties.base.repo.id,
+        pull_number: pullRequestProperties.number,
+        state: 'closed'
     });
-}
+});
 exports.isAProtectedBranch = (protectedBranchParameter) => (baseBranchName) => protectedBranchParameter.toLowerCase() === baseBranchName.toLowerCase();
 exports.start = () => __awaiter(void 0, void 0, void 0, function* () {
     const pullRequestProperties = github_1.context.payload.pull_request;
@@ -65,7 +68,10 @@ const action_1 = __webpack_require__(139);
 const core_1 = __webpack_require__(186);
 action_1.start()
     .then(() => core_1.info('Finished!'))
-    .catch(error => core_1.setFailed(error.message));
+    .catch(error => {
+    console.log('EEE', error);
+    core_1.setFailed(error.message);
+});
 
 
 /***/ }),

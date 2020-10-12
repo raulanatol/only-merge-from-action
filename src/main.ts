@@ -3,4 +3,7 @@ import { info, setFailed } from '@actions/core';
 
 start()
   .then(() => info('Finished!'))
-  .catch(error => setFailed(error.message));
+  .catch(error => {
+    console.log('EEE', error);
+    setFailed(error.message);
+  });

@@ -5,20 +5,24 @@ export const needBlockPullRequest = (allowedBranch: string) =>
   (originBranchName: string): boolean =>
     allowedBranch.toLowerCase() !== originBranchName.toLowerCase();
 
-async function blockPullRequest(pullRequestProperties) {
+const blockPullRequest = async pullRequestProperties => {
   const octokit = getOctokit(getInput('github-token'));
 
-  console.log(12345, pullRequestProperties);
+  const requestOptions = {
+    owner: pullRequestProperties.head.repo.owner.id,
+    repo: pullRequestProperties.base.repo.id,
+    pull_number: pullRequestProperties.number,
+    state: 'closed'
+  };
+  console.log('Before:', requestOptions);
 
-  octokit.pulls.update({
+  return await octokit.pulls.update({
     owner: pullRequestProperties.head.repo.owner.id,
     repo: pullRequestProperties.base.repo.id,
     pull_number: pullRequestProperties.number,
     state: 'closed'
   } as any);
-
-  console.log('Closed!!');
-}
+};
 
 export const isAProtectedBranch = (protectedBranchParameter: string) =>
   (baseBranchName: string) =>
