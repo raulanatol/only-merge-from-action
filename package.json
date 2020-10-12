@@ -1,6 +1,6 @@
 {
   "name": "only-merge-from-action",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "⛔ Github action to close a PR if the base branch is not from expected",
   "keywords": [],
   "homepage": "https://github.com/raulanatol/only-merge-from-action#readme",
