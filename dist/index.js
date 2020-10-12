@@ -23,9 +23,10 @@ const core_1 = __webpack_require__(186);
 exports.needBlockPullRequest = (allowedBranch) => (originBranchName) => allowedBranch.toLowerCase() !== originBranchName.toLowerCase();
 function blockPullRequest(pullRequestProperties) {
     return __awaiter(this, void 0, void 0, function* () {
-        console.log('HERET:', core_1.getInput('github-token'));
         const octokit = github_1.getOctokit(core_1.getInput('github-token'));
-        console.log(123, 'asd');
+        console.log(123, pullRequestProperties.head);
+        console.log(1234, pullRequestProperties.head.owner);
+        console.log(12345, pullRequestProperties.repository);
         octokit.pulls.update({
             owner: pullRequestProperties.head.owner.id,
             repo: pullRequestProperties.repository.id,
@@ -48,7 +49,6 @@ exports.start = () => __awaiter(void 0, void 0, void 0, function* () {
     }
     const originBranchName = pullRequestProperties.head.ref;
     if (exports.needBlockPullRequest(core_1.getInput('allowed-branch'))(originBranchName)) {
-        console.log(3, originBranchName);
         yield blockPullRequest(pullRequestProperties);
     }
     console.log(2, originBranchName);
