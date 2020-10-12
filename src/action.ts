@@ -1,5 +1,5 @@
 import { context, getOctokit } from '@actions/github';
-import { getInput } from '@actions/core';
+import { getInput, warning } from '@actions/core';
 
 export const needBlockPullRequest = (allowedBranch: string) =>
   (originBranchName: string): boolean =>
@@ -25,14 +25,11 @@ export const isAProtectedBranch = (protectedBranchParameter: string) =>
 export const start = async () => {
   console.log('A------->', context);
   console.log('B------->', context.payload);
-  const pullRequestProperties = context.payload.pull_requests;
-  // FIXME
-  // if (!pullRequestProperties) {
-  //   warning('This action only works in a pull_request event');
-  //   return;
-  // }
-
-  console.log('HERE', pullRequestProperties);
+  const pullRequestProperties = context.payload.pull_request;
+  if (!pullRequestProperties) {
+    warning('This action only works in a pull_request event');
+    return;
+  }
 
   const baseBranchName = pullRequestProperties.base.ref;
   if (!isAProtectedBranch(getInput('protected-branch'))(baseBranchName)) {
