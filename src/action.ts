@@ -6,10 +6,11 @@ export const needBlockPullRequest = (allowedBranch: string) =>
     allowedBranch.toLowerCase() !== originBranchName.toLowerCase();
 
 async function blockPullRequest(pullRequestProperties) {
-  console.log('HERET:', getInput('github-token'));
   const octokit = getOctokit(getInput('github-token'));
 
-  console.log(123, 'asd');
+  console.log(123, pullRequestProperties.head);
+  console.log(1234, pullRequestProperties.head.owner);
+  console.log(12345, pullRequestProperties.repository);
 
   octokit.pulls.update({
     owner: pullRequestProperties.head.owner.id,
@@ -39,7 +40,6 @@ export const start = async () => {
 
   const originBranchName = pullRequestProperties.head.ref;
   if (needBlockPullRequest(getInput('allowed-branch'))(originBranchName)) {
-    console.log(3, originBranchName);
     await blockPullRequest(pullRequestProperties);
   }
 
