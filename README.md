@@ -1,5 +1,5 @@
 <div align="center">
-    <h1>template-action-nodejs-ts</h1>
+    <h1>only-merge-from-action</h1>
 </div>
 
 <p>Github action to close a PR if the base branch is not the one specified in the `allowed-branch`.</p>
