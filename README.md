@@ -2,7 +2,7 @@
     <h1>template-action-nodejs-ts</h1>
 </div>
 
-<p>Github action to close a PR if the base branch is not from expected</p>
+<p>Github action to close a PR if the base branch is not the one specified in the allowed branch.</p>
 
 ![message](./docs/message.png)
 
